@@ -1,4 +1,4 @@
-public  class PalindromeCheckerApp{
+public class PalindromeCheckerApp {
 
     static class Node {
         char data;
@@ -64,9 +64,9 @@ public  class PalindromeCheckerApp{
         }
 
         if (isPalindrome(head)) {
-            System.out.println("madam is a palindrome.");
+            System.out.println("Linked List is a palindrome.");
         } else {
-            System.out.println("madam List is not a palindrome.");
+            System.out.println("Linked List is not a palindrome.");
         }
     }
 }
