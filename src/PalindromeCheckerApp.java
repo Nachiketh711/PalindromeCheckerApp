@@ -1,40 +1,72 @@
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+public  class PalindromeCheckerApp{
 
-import java.util.Deque;
-import java.util.LinkedList;
+    static class Node {
+        char data;
+        Node next;
 
-public class PalindromeCheckerApp {
+        Node(char data) {
+            this.data = data;
+        }
+    }
 
-    public static boolean isPalindrome(String str) {
-        // Remove spaces and convert to lowercase
-        str = str.replaceAll("\\s+", "").toLowerCase();
+    static Node left; // Pointer to move from start
 
-        Deque<Character> deque = new LinkedList<>();
+    public static boolean isPalindrome(Node head) {
+        left = head;
+        return checkPalindrome(head);
+    }
 
-        // Add characters to deque
-        for (char ch : str.toCharArray()) {
-            deque.addLast(ch);
+    private static boolean checkPalindrome(Node right) {
+        if (right == null) {
+            return true;
         }
 
-        // Compare front and rear
-        while (deque.size() > 1) {
-            if (!deque.removeFirst().equals(deque.removeLast())) {
-                return false;
-            }
+        // Recursively go to end
+        boolean isPal = checkPalindrome(right.next);
+        if (!isPal) {
+            return false;
         }
+
+        // Compare left and right
+        if (left.data != right.data) {
+            return false;
+        }
+
+        // Move left pointer forward
+        left = left.next;
 
         return true;
     }
 
+    // Helper method to append nodes
+    public static Node append(Node head, char data) {
+        Node newNode = new Node(data);
+
+        if (head == null) {
+            return newNode;
+        }
+
+        Node temp = head;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+
+        temp.next = newNode;
+        return head;
+    }
+
     public static void main(String[] args) {
+        Node head = null;
         String input = "madam";
 
-        if (isPalindrome(input)) {
-            System.out.println(input + " is a palindrome.");
+        for (char ch : input.toCharArray()) {
+            head = append(head, ch);
+        }
+
+        if (isPalindrome(head)) {
+            System.out.println("madam is a palindrome.");
         } else {
-            System.out.println(input + " is not a palindrome.");
+            System.out.println("madam List is not a palindrome.");
         }
     }
 }
