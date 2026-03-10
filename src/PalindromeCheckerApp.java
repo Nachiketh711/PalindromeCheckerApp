@@ -1,25 +1,85 @@
-/*
- *@author Nk
- *@Version 1.0
- * This is to print Basic information
- */
+import java.util.*;
 
 public class PalindromeCheckerApp {
+
+    // Method 1: Reverse String Method
+    public static boolean reverseMethod(String input) {
+        String reversed = new StringBuilder(input).reverse().toString();
+        return input.equals(reversed);
+    }
+
+    // Method 2: Stack Method
+    public static boolean stackMethod(String input) {
+
+        Stack<Character> stack = new Stack<>();
+
+        for (char ch : input.toCharArray()) {
+            stack.push(ch);
+        }
+
+        for (char ch : input.toCharArray()) {
+            if (ch != stack.pop()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Method 3: Two Pointer Method (Most Efficient)
+    public static boolean twoPointerMethod(String input) {
+
+        int left = 0;
+        int right = input.length() - 1;
+
+        while (left < right) {
+            if (input.charAt(left) != input.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+
     public static void main(String[] args) {
-        // Hardcoded string
-        String str = "madam";
 
-        // Reverse string
-        String rev = "";
-        for (int i = str.length() - 1; i >= 0; i--) {
-            rev = rev + str.charAt(i);
-        }
+        Scanner scanner = new Scanner(System.in);
 
-        // Check palindrome
-        if (str.equals(rev)) {
-            System.out.println(str + " is a Palindrome");
-        } else {
-            System.out.println(str + " is not a Palindrome");
-        }
+        System.out.println("Enter a string:");
+        String input = scanner.nextLine();
+
+        // Reverse Method Performance
+        long start1 = System.nanoTime();
+        boolean result1 = reverseMethod(input);
+        long end1 = System.nanoTime();
+        long time1 = end1 - start1;
+
+        // Stack Method Performance
+        long start2 = System.nanoTime();
+        boolean result2 = stackMethod(input);
+        long end2 = System.nanoTime();
+        long time2 = end2 - start2;
+
+        // Two Pointer Method Performance
+        long start3 = System.nanoTime();
+        boolean result3 = twoPointerMethod(input);
+        long end3 = System.nanoTime();
+        long time3 = end3 - start3;
+
+        // Display Results
+        System.out.println("\n=== Results ===");
+
+        System.out.println("Reverse Method: " + result1 +
+                " | Time: " + time1 + " ns");
+
+        System.out.println("Stack Method: " + result2 +
+                " | Time: " + time2 + " ns");
+
+        System.out.println("Two Pointer Method: " + result3 +
+                " | Time: " + time3 + " ns");
+
+        scanner.close();
     }
 }
