@@ -1,72 +1,85 @@
-public  class PalindromeCheckerApp{
+import java.util.*;
 
-    static class Node {
-        char data;
-        Node next;
+public class PalindromeCheckerApp {
 
-        Node(char data) {
-            this.data = data;
-        }
+    // Method 1: Reverse String Method
+    public static boolean reverseMethod(String input) {
+        String reversed = new StringBuilder(input).reverse().toString();
+        return input.equals(reversed);
     }
 
-    static Node left; // Pointer to move from start
+    // Method 2: Stack Method
+    public static boolean stackMethod(String input) {
 
-    public static boolean isPalindrome(Node head) {
-        left = head;
-        return checkPalindrome(head);
-    }
+        Stack<Character> stack = new Stack<>();
 
-    private static boolean checkPalindrome(Node right) {
-        if (right == null) {
-            return true;
+        for (char ch : input.toCharArray()) {
+            stack.push(ch);
         }
 
-        // Recursively go to end
-        boolean isPal = checkPalindrome(right.next);
-        if (!isPal) {
-            return false;
+        for (char ch : input.toCharArray()) {
+            if (ch != stack.pop()) {
+                return false;
+            }
         }
-
-        // Compare left and right
-        if (left.data != right.data) {
-            return false;
-        }
-
-        // Move left pointer forward
-        left = left.next;
 
         return true;
     }
 
-    // Helper method to append nodes
-    public static Node append(Node head, char data) {
-        Node newNode = new Node(data);
+    // Method 3: Two Pointer Method (Most Efficient)
+    public static boolean twoPointerMethod(String input) {
 
-        if (head == null) {
-            return newNode;
+        int left = 0;
+        int right = input.length() - 1;
+
+        while (left < right) {
+            if (input.charAt(left) != input.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
         }
 
-        Node temp = head;
-        while (temp.next != null) {
-            temp = temp.next;
-        }
-
-        temp.next = newNode;
-        return head;
+        return true;
     }
 
     public static void main(String[] args) {
-        Node head = null;
-        String input = "madam";
 
-        for (char ch : input.toCharArray()) {
-            head = append(head, ch);
-        }
+        Scanner scanner = new Scanner(System.in);
 
-        if (isPalindrome(head)) {
-            System.out.println("madam is a palindrome.");
-        } else {
-            System.out.println("madam List is not a palindrome.");
-        }
+        System.out.println("Enter a string:");
+        String input = scanner.nextLine();
+
+        // Reverse Method Performance
+        long start1 = System.nanoTime();
+        boolean result1 = reverseMethod(input);
+        long end1 = System.nanoTime();
+        long time1 = end1 - start1;
+
+        // Stack Method Performance
+        long start2 = System.nanoTime();
+        boolean result2 = stackMethod(input);
+        long end2 = System.nanoTime();
+        long time2 = end2 - start2;
+
+        // Two Pointer Method Performance
+        long start3 = System.nanoTime();
+        boolean result3 = twoPointerMethod(input);
+        long end3 = System.nanoTime();
+        long time3 = end3 - start3;
+
+        // Display Results
+        System.out.println("\n=== Results ===");
+
+        System.out.println("Reverse Method: " + result1 +
+                " | Time: " + time1 + " ns");
+
+        System.out.println("Stack Method: " + result2 +
+                " | Time: " + time2 + " ns");
+
+        System.out.println("Two Pointer Method: " + result3 +
+                " | Time: " + time3 + " ns");
+
+        scanner.close();
     }
 }
