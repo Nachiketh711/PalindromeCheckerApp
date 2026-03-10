@@ -1,57 +1,84 @@
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
-// PalindromeChecker class encapsulates palindrome logic
-class PalindromeChecker {
+public class PalindromeCheckerApp {
 
-    // Public method to check palindrome
-    public boolean checkPalindrome(String input) {
+    // Method 1: Reverse String Method
+    public static boolean reverseMethod(String input) {
+        String reversed = new StringBuilder(input).reverse().toString();
+        return input.equals(reversed);
+    }
 
-        if (input == null) {
-            return false;
-        }
-
-        // Normalize string: remove non-alphanumeric & convert to lowercase
-        String cleaned = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+    // Method 2: Stack Method
+    public static boolean stackMethod(String input) {
 
         Stack<Character> stack = new Stack<>();
 
-        // Push all characters into stack
-        for (int i = 0; i < cleaned.length(); i++) {
-            stack.push(cleaned.charAt(i));
+        for (char ch : input.toCharArray()) {
+            stack.push(ch);
         }
 
-        // Compare original and reversed (using stack)
-        for (int i = 0; i < cleaned.length(); i++) {
-            if (cleaned.charAt(i) != stack.pop()) {
+        for (char ch : input.toCharArray()) {
+            if (ch != stack.pop()) {
                 return false;
             }
         }
 
         return true;
     }
-}
 
-// Main Application Class
-public class PalindromeCheckerApp {
+    // Method 3: Two Pointer Method (Most Efficient)
+    public static boolean twoPointerMethod(String input) {
+
+        int left = 0;
+        int right = input.length() - 1;
+
+        while (left < right) {
+            if (input.charAt(left) != input.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+
+        return true;
+    }
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        PalindromeChecker checker = new PalindromeChecker();
 
-        System.out.println("=== Palindrome Checker App (UC11 - OOPS) ===");
-        System.out.print("Enter a string to check: ");
-
+        System.out.println("Enter a string:");
         String input = scanner.nextLine();
 
-        boolean result = checker.checkPalindrome(input);
+        // Reverse Method Performance
+        long start1 = System.nanoTime();
+        boolean result1 = reverseMethod(input);
+        long end1 = System.nanoTime();
+        long time1 = end1 - start1;
 
-        if (result) {
-            System.out.println("Result: The given string IS a palindrome.");
-        } else {
-            System.out.println("Result: The given string is NOT a palindrome.");
-        }
+        // Stack Method Performance
+        long start2 = System.nanoTime();
+        boolean result2 = stackMethod(input);
+        long end2 = System.nanoTime();
+        long time2 = end2 - start2;
+
+        // Two Pointer Method Performance
+        long start3 = System.nanoTime();
+        boolean result3 = twoPointerMethod(input);
+        long end3 = System.nanoTime();
+        long time3 = end3 - start3;
+
+        // Display Results
+        System.out.println("\n=== Results ===");
+
+        System.out.println("Reverse Method: " + result1 +
+                " | Time: " + time1 + " ns");
+
+        System.out.println("Stack Method: " + result2 +
+                " | Time: " + time2 + " ns");
+
+        System.out.println("Two Pointer Method: " + result3 +
+                " | Time: " + time3 + " ns");
 
         scanner.close();
     }
