@@ -1,25 +1,24 @@
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 public class PalindromeCheckerApp {
 
-    public static boolean isPalindrome(String str) {
-        // Optional: remove spaces and make lowercase
-        str = str.replaceAll("\\s+", "").toLowerCase();
+    // Method 1: Reverse String Method
+    public static boolean reverseMethod(String input) {
+        String reversed = new StringBuilder(input).reverse().toString();
+        return input.equals(reversed);
+    }
+
+    // Method 2: Stack Method
+    public static boolean stackMethod(String input) {
 
         Stack<Character> stack = new Stack<>();
-        Queue<Character> queue = new LinkedList<>();
 
-        // Add characters to both stack and queue
-        for (char ch : str.toCharArray()) {
+        for (char ch : input.toCharArray()) {
             stack.push(ch);
-            queue.add(ch);
         }
 
-        // Compare elements
-        while (!stack.isEmpty()) {
-            if (!stack.pop().equals(queue.remove())) {
+        for (char ch : input.toCharArray()) {
+            if (ch != stack.pop()) {
                 return false;
             }
         }
@@ -27,13 +26,60 @@ public class PalindromeCheckerApp {
         return true;
     }
 
-    public static void main(String[] args) {
-        String input = "madam";
+    // Method 3: Two Pointer Method (Most Efficient)
+    public static boolean twoPointerMethod(String input) {
 
-        if (isPalindrome(input)) {
-            System.out.println(input + " is a palindrome.");
-        } else {
-            System.out.println(input + " is not a palindrome.");
+        int left = 0;
+        int right = input.length() - 1;
+
+        while (left < right) {
+            if (input.charAt(left) != input.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
         }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter a string:");
+        String input = scanner.nextLine();
+
+        // Reverse Method Performance
+        long start1 = System.nanoTime();
+        boolean result1 = reverseMethod(input);
+        long end1 = System.nanoTime();
+        long time1 = end1 - start1;
+
+        // Stack Method Performance
+        long start2 = System.nanoTime();
+        boolean result2 = stackMethod(input);
+        long end2 = System.nanoTime();
+        long time2 = end2 - start2;
+
+        // Two Pointer Method Performance
+        long start3 = System.nanoTime();
+        boolean result3 = twoPointerMethod(input);
+        long end3 = System.nanoTime();
+        long time3 = end3 - start3;
+
+        // Display Results
+        System.out.println("\n=== Results ===");
+
+        System.out.println("Reverse Method: " + result1 +
+                " | Time: " + time1 + " ns");
+
+        System.out.println("Stack Method: " + result2 +
+                " | Time: " + time2 + " ns");
+
+        System.out.println("Two Pointer Method: " + result3 +
+                " | Time: " + time3 + " ns");
+
+        scanner.close();
     }
 }
