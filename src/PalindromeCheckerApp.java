@@ -1,30 +1,41 @@
+import java.util.*;
+
 public class PalindromeCheckerApp {
 
-    public static boolean isPalindrome(String str) {
+    // Method 1: Reverse String Method
+    public static boolean reverseMethod(String input) {
+        String reversed = new StringBuilder(input).reverse().toString();
+        return input.equals(reversed);
+    }
 
-        int left = 0;
-        int right = str.length() - 1;
+    // Method 2: Stack Method
+    public static boolean stackMethod(String input) {
 
-        while (left < right) {
+        Stack<Character> stack = new Stack<>();
 
-            // Skip spaces on left
-            if (str.charAt(left) == ' ') {
-                left++;
-                continue;
-            }
+        for (char ch : input.toCharArray()) {
+            stack.push(ch);
+        }
 
-            // Skip spaces on right
-            if (str.charAt(right) == ' ') {
-                right--;
-                continue;
-            }
-
-            // Compare ignoring case
-            if (Character.toLowerCase(str.charAt(left)) !=
-                    Character.toLowerCase(str.charAt(right))) {
+        for (char ch : input.toCharArray()) {
+            if (ch != stack.pop()) {
                 return false;
             }
+        }
 
+        return true;
+    }
+
+    // Method 3: Two Pointer Method (Most Efficient)
+    public static boolean twoPointerMethod(String input) {
+
+        int left = 0;
+        int right = input.length() - 1;
+
+        while (left < right) {
+            if (input.charAt(left) != input.charAt(right)) {
+                return false;
+            }
             left++;
             right--;
         }
@@ -34,12 +45,41 @@ public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        String input = "A man a plan a canal Panama";
+        Scanner scanner = new Scanner(System.in);
 
-        if (isPalindrome(input)) {
-            System.out.println("Palindrome");
-        } else {
-            System.out.println("Not a Palindrome");
-        }
+        System.out.println("Enter a string:");
+        String input = scanner.nextLine();
+
+        // Reverse Method Performance
+        long start1 = System.nanoTime();
+        boolean result1 = reverseMethod(input);
+        long end1 = System.nanoTime();
+        long time1 = end1 - start1;
+
+        // Stack Method Performance
+        long start2 = System.nanoTime();
+        boolean result2 = stackMethod(input);
+        long end2 = System.nanoTime();
+        long time2 = end2 - start2;
+
+        // Two Pointer Method Performance
+        long start3 = System.nanoTime();
+        boolean result3 = twoPointerMethod(input);
+        long end3 = System.nanoTime();
+        long time3 = end3 - start3;
+
+        // Display Results
+        System.out.println("\n=== Results ===");
+
+        System.out.println("Reverse Method: " + result1 +
+                " | Time: " + time1 + " ns");
+
+        System.out.println("Stack Method: " + result2 +
+                " | Time: " + time2 + " ns");
+
+        System.out.println("Two Pointer Method: " + result3 +
+                " | Time: " + time3 + " ns");
+
+        scanner.close();
     }
 }
